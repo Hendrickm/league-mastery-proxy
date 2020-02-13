@@ -3,7 +3,7 @@ const request = require('request');
 
 const app = express();
 
-const API_KEY = 'RGAPI-a1bb881a-3b7f-4a31-8268-96afa2596d8d'
+const API_KEY = 'RGAPI-805412bf-dbdb-4a18-8646-fd248a904469'
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -38,10 +38,25 @@ app.get('/summoners/by-name', (req, res) => {
 
 app.get('/matchlists/by-account', (req, res) => {
   const {accountId, region} = req.query;
-  const queryParams = { beginIndex: '0', endIndex:'20' };
+  const queryParams = { beginIndex: '0', endIndex:'10' };
 
   request(
     { url: `https://${region}.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}?api_key=${API_KEY}`,qs: queryParams },
+    (error, response, body) => {
+      if (error || response.statusCode !== 200) {
+        return res.status(500).json({ type: 'error', message: error });
+      }
+      res.json(JSON.parse(body));
+    }
+  )
+});
+
+app.get('/matches', (req, res) => {
+  const { gameId, region } = req.query;
+  // const queryParams = { beginIndex: '0', endIndex:'20' };
+
+  request(
+    { url: `https://${region}.api.riotgames.com/lol/match/v4/matches/${gameId}?api_key=${API_KEY}` },
     (error, response, body) => {
       if (error || response.statusCode !== 200) {
         return res.status(500).json({ type: 'error', message: error });

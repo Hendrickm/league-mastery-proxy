@@ -3,7 +3,7 @@ const request = require('request');
 
 const app = express();
 
-const API_KEY = 'RGAPI-805412bf-dbdb-4a18-8646-fd248a904469'
+const API_KEY = 'RGAPI-1be2e548-8643-4dd2-b414-43bbfe2a07f3'
 
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
@@ -37,8 +37,10 @@ app.get('/summoners/by-name', (req, res) => {
 });
 
 app.get('/matchlists/by-account', (req, res) => {
-  const {accountId, region} = req.query;
-  const queryParams = { beginIndex: '0', endIndex:'10' };
+  const {
+    accountId, region, beginIndex ='0', endIndex = '10'
+  } = req.query;
+  const queryParams = { beginIndex, endIndex};
 
   request(
     { url: `https://${region}.api.riotgames.com/lol/match/v4/matchlists/by-account/${accountId}?api_key=${API_KEY}`,qs: queryParams },
